@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 
 
-NUM_OF_CHARGES = 10
+NUM_OF_CHARGES = 2
 K = 8.9875e9
+
 
 def charge():
     position = np.random.uniform(0, 10, size=3)
@@ -18,7 +18,6 @@ def matrix(num_of_charges):
         pos, val = charge()
         row = np.append(pos, val)
         arr.append(row)
-    # print(arr)
     return arr
 
 
@@ -30,11 +29,9 @@ def plot(data):
             ax.scatter(row[0], row[1], row[2], color='red')
         if row[3] <= 0:
             ax.scatter(row[0], row[1], row[2], color='blue')
-
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-
     plt.show()
 
 
@@ -44,7 +41,7 @@ def potential(a, b, h, data):
     :param a: x coordinate of the point
     :param b: y coordinate of the point
     :param h: z coordinate of the point
-    :param data: matrix of chargessss uwu
+    :param data: matrix of charges
     :return: potential in this one point
     """
     potentials = []
@@ -60,14 +57,13 @@ def potential(a, b, h, data):
 
 
 def isoline(h, data):
-    grid_len = 100
-    xlist = np.linspace(0, 10, grid_len)
-    ylist = np.linspace(0, 10, grid_len)
-    array = np.zeros((grid_len, grid_len))
+    grid_resolution = 500
+    xlist = np.linspace(0, 10, grid_resolution)
+    ylist = np.linspace(0, 10, grid_resolution)
+    array = np.zeros((grid_resolution, grid_resolution))
     for a_ind, a in enumerate(xlist):
         for b_ind, b in enumerate(ylist):
             array[a_ind, b_ind] = potential(a, b, h, data)
-
     X, Y = np.meshgrid(xlist, ylist)
     fig, ax = plt.subplots(1, 1)
     cp = ax.contourf(X, Y, array, levels=20)
@@ -75,7 +71,8 @@ def isoline(h, data):
     ax.set_title('Electric Potential')
     plt.show()
 
-data = matrix(100)
+
+data = matrix(NUM_OF_CHARGES)
 isoline(5, data)
 plot(data)
 
